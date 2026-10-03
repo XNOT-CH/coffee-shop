@@ -1,15 +1,22 @@
-import menu from './data/menu'
-import MenuCard from './components/MenuCard'
+import { Routes, Route } from 'react-router-dom'
+import Navbar from './components/Navbar'
+import MenuPage from './pages/MenuPage'
+import CartPage from './pages/CartPage'
+import QueuePage from './pages/QueuePage'
+import StaffPage from './pages/StaffPage'
 
 const App = () => {
   return (
-    <div>
-      <h1>เมนู</h1>
-      <div className="menu-list">
-        {menu.map((item) => (
-          <MenuCard key={item.id} item={item} />
-        ))}
-      </div>
+    <div className="app">
+      <Navbar />
+      <main>
+        <Routes>
+          <Route path="/" element={<MenuPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/queue/:id" element={<QueuePage />} />
+          <Route path="/staff" element={<StaffPage />} />
+        </Routes>
+      </main>
     </div>
   )
 }
