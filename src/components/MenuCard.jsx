@@ -1,4 +1,6 @@
+import { useCart } from '../context/CartContext'    // ใหม่ 
 const MenuCard = ({ item }) => {
+    const { addToCart } = useCart()       // ← ใหม่
     return (
         <div className="menu-card">
             <img src={item.image} alt={item.name} />
@@ -7,7 +9,9 @@ const MenuCard = ({ item }) => {
             <p>{item.description}</p>
             {item.type && <span className="type">{item.type}</span>}
             <p className="price">{item.price} บาท</p>
-            <button disabled={!item.isAvailable}>
+            <button disabled={!item.isAvailable}
+            onClick={() => addToCart(item)}      // ← ใหม่   
+            >
                 {item.isAvailable ? 'ใส่ตะกร้า' : 'หมด'}
             </button>
         </div>
