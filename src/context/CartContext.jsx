@@ -57,6 +57,9 @@ export const CartProvider = ({ children }) => {
                 )
             }
 
+
+              const totalPrice = cart.reduce((sum, c) => sum + c.price * c.quantity, 0)
+
             // ยังไม่มี → เพิ่มเป็นรายการใหม่ จำนวน 1
             // ใช้ ... สร้างตะกร้าใบใหม่ (ห้ามใช้ push แก้ของเดิม หน้าจอจะไม่อัปเดต)
             return [...prev, { ...item, quantity: 1 }]
