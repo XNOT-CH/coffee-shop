@@ -1,13 +1,13 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import CartItem from '../components/CartItem'
 import supabase from '../supabaseClient'
 
 const CartPage = () => {
-  const { cart, totalPrice } = useCart()
+  const { cart, totalPrice, clearCart } = useCart()   // ← เพิ่ม clearCart
   const [customerName, setCustomerName] = useState('')
-
+  const navigate = useNavigate()                      // ← เพิ่มบรรทัดนี้
 
   // ส่งตะกร้าเข้า Supabase
   const handleConfirm = async () => {
@@ -34,9 +34,12 @@ const CartPage = () => {
       return
     }
 
-    console.log('สั่งสำเร็จ:', data)
+    // สั่งสำเร็จ → ล้างตะกร้า แล้วพาไปหน้าเลขคิวของออเดอร์นี้
+    clearCart()
+    navigate(`/queue/${data.id}`)
   }
 
+  // ตะกร้าว่าง → แสดงข้อความแล้วจบเลย
   if (cart.length === 0) {
     return (
       <div>
@@ -70,8 +73,8 @@ const CartPage = () => {
 
         <p className="cart-total">ยอดรวม {totalPrice} บาท</p>
 
-           {/* // ส่งตะกร้าเข้า Supabase  */}
-        <button className="confirm-btn" onClick={handleConfirm}>ยืนยันสั่งเลย</button> 
+        {/* กดแล้วส่งตะกร้าเข้า Supabase */}
+        <button className="confirm-btn" onClick={handleConfirm}>ยืนยันสั่งเลย</button>
       </div>
     </div>
   )
