@@ -35,7 +35,7 @@ export const CartProvider = ({ children }) => {
                 )
             }
 
-
+            
             const removeFromCart = (id) => {
                 setCart((prev) => prev.filter((c) => c.id !== id))
             }

@@ -2,10 +2,40 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import CartItem from '../components/CartItem'
+import supabase from '../supabaseClient'
 
 const CartPage = () => {
   const { cart, totalPrice } = useCart()
   const [customerName, setCustomerName] = useState('')
+
+
+  // ส่งตะกร้าเข้า Supabase
+  const handleConfirm = async () => {
+    const items = cart.map((c) => ({
+      id: c.id,
+      name: c.name,
+      price: c.price,
+      quantity: c.quantity,
+    }))
+
+    const { data, error } = await supabase
+      .from('orders')
+      .insert({
+        items,
+        total: totalPrice,
+        customer_name: customerName,
+      })
+      .select()
+      .single()
+
+    if (error) {
+      console.log('สั่งไม่สำเร็จ:', error)
+      alert('สั่งไม่สำเร็จ ลองใหม่อีกครั้ง')
+      return
+    }
+
+    console.log('สั่งสำเร็จ:', data)
+  }
 
   if (cart.length === 0) {
     return (
@@ -40,7 +70,8 @@ const CartPage = () => {
 
         <p className="cart-total">ยอดรวม {totalPrice} บาท</p>
 
-        <button className="confirm-btn">ยืนยันสั่งเลย</button>
+           {/* // ส่งตะกร้าเข้า Supabase  */}
+        <button className="confirm-btn" onClick={handleConfirm}>ยืนยันสั่งเลย</button> 
       </div>
     </div>
   )
