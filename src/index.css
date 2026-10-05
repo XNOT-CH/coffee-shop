@@ -221,48 +221,38 @@ main > div > h2 {
    ========================================================================== */
 .banner-slider {
   margin-bottom: 16px;
-}
-
-.banner-track {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
+  overflow: hidden;
+  animation: fade-up 0.45s var(--ease-out) backwards;
 }
 
-.banner-track::-webkit-scrollbar {
-  display: none;
-}
-
-.banner-track img {
-  flex: 0 0 100%;
-  width: 100%;
+.banner-slider .swiper-slide img {
   display: block;
-  scroll-snap-align: center;
+  width: 100%;
+  aspect-ratio: 1000 / 400;
+  object-fit: cover;
 }
 
-.banner-dots {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  margin-top: 10px;
-}
-
-.dot {
+/* Pagination dots — pill-shaped active dot */
+.banner-slider .swiper-pagination-bullet {
   width: 8px;
   height: 8px;
+  margin: 0 3px;
   border-radius: var(--radius-full);
-  background: var(--color-border-strong);
+  background: var(--color-surface-raised);
+  opacity: 0.7;
+  box-shadow: 0 1px 4px rgba(46, 30, 22, 0.3);
   transition:
     width 0.3s var(--ease-out),
-    background-color 0.3s;
+    background-color 0.3s,
+    opacity 0.3s;
 }
 
-.dot.active {
+.banner-slider .swiper-pagination-bullet-active {
   width: 22px;
   background: var(--color-primary);
+  opacity: 1;
 }
 
 .category,
@@ -643,6 +633,241 @@ main > div > h2 + p + a {
 }
 
 /* ==========================================================================
+   Loading / not found
+   ========================================================================== */
+/* "กำลังโหลด..." */
+main > p {
+  padding: 48px 0;
+  text-align: center;
+  color: var(--color-text-muted);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+/* Queue not found: heading + link back to the menu */
+main > div > h2 + a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  height: 42px;
+  margin: 24px auto 0;
+  padding: 0 22px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  color: var(--color-surface-raised);
+  font-family: var(--font-heading);
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: 0 6px 16px rgba(164, 117, 81, 0.35);
+}
+
+/* ==========================================================================
+   Queue
+   ========================================================================== */
+.queue-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-top: 12px;
+  padding: 28px 18px 20px;
+  border-radius: var(--radius-xl);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  animation: fade-up 0.45s var(--ease-out) backwards;
+}
+
+.queue-page > p:first-child {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+main > .queue-page > h2.queue-number {
+  padding: 0;
+  font-size: 64px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: 2px;
+  color: var(--color-primary);
+  animation: pop 0.5s var(--ease-spring) 0.15s backwards;
+}
+
+/* Customer name — undo the empty-cart "h2 + p" spacing */
+main > .queue-page > h2 + p {
+  padding: 0;
+  color: var(--color-text);
+  font-family: var(--font-heading);
+  font-size: 16px;
+}
+
+.queue-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  margin-top: 8px;
+  padding: 0 14px;
+  border-radius: var(--radius-full);
+  background: var(--status-making-bg);
+  color: var(--status-making-text);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.queue-status::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: currentColor;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+.queue-items {
+  align-self: stretch;
+  margin: 20px 0 16px;
+  padding: 14px 16px;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  text-align: left;
+}
+
+.queue-items h3 {
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.queue-items p {
+  padding: 4px 0;
+  font-size: 14px;
+}
+
+.queue-items p.queue-total {
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--color-border-strong);
+  text-align: right;
+  font-family: var(--font-heading);
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+.queue-page > a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  height: 46px;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-surface-raised);
+  font-family: var(--font-heading);
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(164, 117, 81, 0.35);
+  transition:
+    transform 0.15s var(--ease-out),
+    background-color 0.2s;
+}
+
+.queue-page > a:hover {
+  background: var(--color-primary-hover);
+}
+
+.queue-page > a:active {
+  transform: scale(0.97);
+}
+
+/* ==========================================================================
+   Staff
+   ========================================================================== */
+.staff-page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+main > .staff-page > h2 {
+  padding-bottom: 0;
+}
+
+.order-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 16px;
+  border: 1px solid var(--color-border);
+  border-left: 5px solid var(--color-accent);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-sm);
+  animation: fade-up 0.35s var(--ease-out) backwards;
+}
+
+/* No action button left → order is finished, fade it back */
+.order-card:not(:has(button)) {
+  border-left-color: var(--status-dot-ready);
+  opacity: 0.7;
+}
+
+.order-card h3 {
+  font-size: 16px;
+}
+
+.order-card .order-status {
+  align-self: flex-start;
+  margin: 4px 0 8px;
+  padding: 2px 12px;
+  border-radius: var(--radius-full);
+  background: var(--color-accent-soft);
+  color: var(--status-new-text);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.order-card:not(:has(button)) .order-status {
+  background: var(--status-ready-bg);
+  color: var(--status-ready-text);
+}
+
+.order-card p:not([class]) {
+  font-size: 14px;
+}
+
+.order-card .order-total {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--color-border-strong);
+  font-family: var(--font-heading);
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+.order-card button {
+  height: 42px;
+  margin-top: 10px;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-surface-raised);
+  font-family: var(--font-heading);
+  font-weight: 500;
+  box-shadow: 0 6px 16px rgba(164, 117, 81, 0.3);
+  transition:
+    transform 0.15s var(--ease-out),
+    background-color 0.2s;
+}
+
+.order-card button:hover {
+  background: var(--color-primary-hover);
+}
+
+.order-card button:active {
+  transform: scale(0.97);
+}
+
+/* ==========================================================================
    Animations
    ========================================================================== */
 @keyframes page-enter {
@@ -656,6 +881,19 @@ main > div > h2 + p + a {
   from {
     opacity: 0;
     transform: translateY(16px) scale(0.97);
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.45;
   }
 }
 

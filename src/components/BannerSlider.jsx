@@ -1,34 +1,31 @@
-import { useState } from 'react'
+import { Swiper, SwiperSlide} from 'swiper/react';
+import { Autoplay, Pagination } from 'swiper/modules'
+import 'swiper/css';
+import 'swiper/css/pagination'
 
-const banners = [
-    '/banners/Gemini_Generated_Image_y91scuy91scuy91s.jpg',
-    '/banners/Gemini_Generated_Image_m7zwjgm7zwjgm7zw.jpg',
+// ทำสไลเดอร์สำหรับแบนเนอร์
+const banners  = [
+    '/images/banner-1.jpg',
+    '/images/banner-2.jpg',
+    '/images/banner-3.jpg',
 ]
 
 const BannerSlider = () => {
-    const [current, setCurrent] = useState(0)
-
-    return (
-        <div className="banner-slider">
-            <div
-                className="banner-track"
-                onScroll={(e) => setCurrent(Math.round(e.target.scrollLeft / e.target.clientWidth))}
-            >
-                {banners.map((banner, index) => (
-                    <img key={banner} src={banner} alt={`โปรโมชัน ${index + 1}`} />
-                ))}
-            </div>
-
-            <div className="banner-dots">
-                {banners.map((banner, index) => (
-                    <span
-                        key={banner}
-                        className={current === index ? 'dot active' : 'dot'}
-                    ></span>
-                ))}
-            </div>
-        </div>
-    )
+  return (
+    <Swiper
+      className="banner-slider"
+      modules={[Autoplay, Pagination]}
+      autoplay={{ delay: 500 }}
+      pagination={{ clickable: true }}
+      loop
+    >
+      {banners.map((src) => (
+        <SwiperSlide key={src}>
+          <img src={src} alt="โปรโมชันของร้าน" />
+        </SwiperSlide>
+      ))}
+    </Swiper>
+  )
 }
 
 export default BannerSlider

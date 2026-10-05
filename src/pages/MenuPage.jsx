@@ -3,6 +3,7 @@ import menu from '../data/menu'
 import MenuCard from '../components/MenuCard'
 import BannerSlider from '../components/BannerSlider'
 const categories = ['ทั้งหมด', 'กาแฟ', 'ชาและนม', 'ขนม']
+  
 
 // ค่า เริ่มต้น ของปุ่ม
 const MenuPage = () => {
@@ -22,8 +23,8 @@ const MenuPage = () => {
   // JSX
   return (
     <div>
+      <BannerSlider />
       <h2>เมนู</h2>
-      {/* <BannerSlider /> */}
 
 
       <div className='category'>
