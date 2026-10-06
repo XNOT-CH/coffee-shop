@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom' // ← เพิ่ม
 import supabase from '../supabaseClient'
 
 // แปลงสถานะภาษาอังกฤษในฐานข้อมูล เป็นภาษาไทยไว้แสดงผล
@@ -12,10 +13,18 @@ const statusLabel = {
 const StaffPage = () => {
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
+  const navigate = useNavigate() // ← เพิ่ม: ตัวพาเปลี่ยนหน้า
 
   // เปิดหน้า → ดึงออเดอร์ทั้งหมด เรียงจากเก่าไปใหม่ (ใครสั่งก่อนอยู่บน)
   useEffect(() => {
     const fetchOrders = async () => {
+      // ← เพิ่ม: เช็กก่อนว่าล็อกอินหรือยัง ถ้ายัง → เด้งไปหน้าล็อกอิน
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        navigate('/login')
+        return
+      }
+
       const { data, error } = await supabase
         .from('orders')
         .select('*')
@@ -52,6 +61,12 @@ const StaffPage = () => {
     )
   }
 
+  // ← เพิ่ม: ออกจากระบบ แล้วกลับไปหน้าล็อกอิน
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    navigate('/login')
+  }
+
   if (loading) {
     return <p>กำลังโหลด...</p>
   }
@@ -61,6 +76,7 @@ const StaffPage = () => {
       <div>
         <h2>ออเดอร์ทั้งหมด</h2>
         <p>ยังไม่มีออเดอร์</p>
+        <button onClick={handleLogout}>ออกจากระบบ</button> {/* ← เพิ่ม */}
       </div>
     )
   }
@@ -68,6 +84,7 @@ const StaffPage = () => {
   return (
     <div className="staff-page">
       <h2>ออเดอร์ทั้งหมด ({orders.length})</h2>
+      <button onClick={handleLogout}>ออกจากระบบ</button> {/* ← เพิ่ม */}
 
       {orders.map((order) => (
         <div key={order.id} className="order-card">

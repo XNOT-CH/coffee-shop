@@ -19,16 +19,18 @@ const MenuPage = () => {
       : menu.filter((item) => item.category === selectedCategory);
 
   // ค้นหาได้ด้วย อะไรบ้าง มี ชื่อ คำอธิบาย
-  const filteredMenuWithSearch = menu.filter((item) => {
+  const filteredMenuWithSearch = filteredMenu.filter((item) => {
+    const keyword = searchTerm.trim().toLowerCase();
     return (
-      item.name.includes(searchTerm) || item.description.includes(searchTerm)
+      item.name.toLowerCase().includes(keyword) ||
+      item.description.toLowerCase().includes(keyword)
     );
   });
 
   // JSX
   return (
     <div>
-      <BannerSlider /> {/*  เราดึงมาใช้จากหน้า BannerSlider  */}
+      <BannerSlider />    {/* เราดึงมาใช้จากหน้า  */}
       <h2>เมนู</h2>
 
       {/* ช่องค้นหาเมนู กรอง ชื่อ และ คำอธิบาย  */}
