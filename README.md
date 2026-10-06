@@ -1,16 +1,159 @@
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+# ☕ Gachi Café — ระบบสั่งเครื่องดื่มร้านกาแฟออนไลน์
+ 
+เว็บแอปพลิเคชันสำหรับร้านกาแฟ ลูกค้าเลือกเมนู สั่งเครื่องดื่ม และติดตามสถานะคิวได้เอง ส่วนพนักงานล็อกอินเพื่อดูออเดอร์ทั้งหมดและอัปเดตสถานะได้แบบเรียลไทม์ผ่านฐานข้อมูล
+ 
+- 🌐 **เว็บไซต์:** https://coffee-shop-ruby-chi.vercel.app
+- 💻 **GitHub:** https://github.com/XNOT-CH/coffee-shop
+---
+ 
+## ✨ ความสามารถของระบบ
+ 
+**ฝั่งลูกค้า (ไม่ต้องล็อกอิน)**
+- ดูเมนู 23 รายการ พร้อมแบนเนอร์โปรโมชันแบบสไลด์
+- กรองเมนูตามหมวด: กาแฟ / ชาและนม / ขนม
+- ตะกร้าสินค้า: เพิ่ม ลด ลบ รายการ และคำนวณยอดรวมอัตโนมัติ
+- ใส่ชื่อเล่นสำหรับเรียกรับเครื่องดื่ม
+- กดยืนยันสั่ง → บันทึกออเดอร์ลงฐานข้อมูล → ได้เลขคิว เช่น `A005`
+- หน้าเลขคิวแสดงรายการที่สั่ง ยอดรวม และสถานะออเดอร์
+**ฝั่งพนักงาน (ต้องล็อกอิน)**
+- ล็อกอินด้วยบัญชี Google หรืออีเมล + รหัสผ่าน
+- ดูออเดอร์ทั้งหมด เรียงตามลำดับเวลาที่สั่ง
+- เปลี่ยนสถานะออเดอร์: รอทำ → กำลังทำ → เสร็จแล้ว
+- จำกัดสิทธิ์ด้วย Row Level Security (RLS) เฉพาะอีเมลพนักงานเท่านั้นที่ดูและแก้ออเดอร์ได้
+---
+ 
+## 🔑 บัญชีสำหรับทดสอบ (หน้าพนักงาน)
+ 
+| ช่องทาง | อีเมล | รหัสผ่าน |
+|---|---|---|
+| อีเมล + รหัสผ่าน | `staff@coffee.com` | `123456` |
+ 
+> เข้าหน้าพนักงานได้ที่เมนู **พนักงาน** หรือ `/login`
+ 
+---
+ 
+## 🛠️ เทคโนโลยีที่ใช้
+ 
+| เทคโนโลยี | ใช้ทำอะไร |
+|---|---|
+| [React](https://react.dev) + [Vite](https://vite.dev) | สร้างหน้าเว็บแบบ Component |
+| [React Router](https://reactrouter.com) | ระบบหลายหน้า (`/`, `/cart`, `/queue/:id`, `/staff`, `/login`) |
+| React Context | ตะกร้าสินค้าที่ใช้ร่วมกันทุกหน้า |
+| [Supabase](https://supabase.com) | ฐานข้อมูล PostgreSQL + ระบบล็อกอิน (Auth) + RLS |
+| Google OAuth (Google Cloud) | ล็อกอินพนักงานด้วยบัญชี Google |
+| [Swiper](https://swiperjs.com) | แบนเนอร์โปรโมชันแบบสไลด์ |
+| [Vercel](https://vercel.com) | Hosting เผยแพร่เว็บ |
+ 
+---
+ 
+## 🚀 วิธีติดตั้งและรันในเครื่อง
+ 
+**สิ่งที่ต้องมี:** [Node.js](https://nodejs.org) เวอร์ชัน LTS และ Git
+ 
+**1. Clone โปรเจกต์**
+```bash
+git clone https://github.com/XNOT-CH/coffee-shop.git
+cd coffee-shop
+```
+ 
+**2. ติดตั้ง library**
+```bash
+npm install
+```
+ 
+**3. สร้างไฟล์ `.env.local`** ไว้ระดับเดียวกับ `package.json`
+```
+VITE_SUPABASE_URL=https://xxxxxxxx.supabase.co
+VITE_SUPABASE_KEY=sb_publishable_xxxxxxxx
+```
+ค่าทั้งสองดูได้ที่ Supabase → Project Settings → API Keys (ใช้ **publishable key** เท่านั้น ห้ามใช้ secret key)
+ 
+**4. รันเว็บ**
+```bash
+npm run dev
+```
+เปิด http://localhost:5173
+ 
+---
+ 
+## 📖 วิธีใช้งาน
+ 
+**ลูกค้า**
+1. หน้าแรก เลือกหมวดเมนู แล้วกด **ใส่ตะกร้า**
+2. กด **ตะกร้า** ที่แถบด้านบน ปรับจำนวนด้วยปุ่ม `-` `+` หรือกด **ลบ**
+3. ใส่ชื่อเล่น แล้วกด **ยืนยันสั่งเลย**
+4. ระบบพาไปหน้าเลขคิว จดเลขคิวไว้ และกดรีเฟรชเพื่อดูสถานะล่าสุด
+**พนักงาน**
+1. กด **พนักงาน** → ล็อกอินด้วย Google หรืออีเมล + รหัสผ่าน
+2. ดูออเดอร์ทั้งหมด กด **เริ่มทำ** เมื่อเริ่มชง และ **ทำเสร็จแล้ว** เมื่อพร้อมเสิร์ฟ
+3. กด **ออกจากระบบ** เมื่อเลิกใช้งาน
+---
+ 
+## 📁 โครงสร้างโปรเจกต์
+ 
+```
+src/
+├── main.jsx              จุดเริ่มต้น ครอบแอปด้วย BrowserRouter และ CartProvider
+├── App.jsx               Navbar + กำหนดเส้นทางของแต่ละหน้า
+├── supabaseClient.js     ตัวเชื่อมต่อ Supabase
+├── context/
+│   └── CartContext.jsx   ตะกร้าสินค้ากลาง (เพิ่ม ลด ลบ ล้าง ยอดรวม)
+├── data/
+│   └── menu.js           ข้อมูลเมนู 23 รายการ
+├── components/
+│   ├── Navbar.jsx        แถบด้านบน + จำนวนสินค้าในตะกร้า
+│   ├── BannerSlider.jsx  แบนเนอร์โปรโมชัน (Swiper)
+│   ├── MenuCard.jsx      การ์ดเมนู 1 รายการ
+│   └── CartItem.jsx      รายการในตะกร้า 1 รายการ
+└── pages/
+    ├── MenuPage.jsx      หน้าเมนู + ปุ่มกรองหมวด
+    ├── CartPage.jsx      หน้าตะกร้า + ยืนยันสั่ง
+    ├── QueuePage.jsx     หน้าเลขคิวและสถานะ
+    ├── LoginPage.jsx     หน้าล็อกอินพนักงาน
+    └── StaffPage.jsx     หน้าพนักงาน ดูและอัปเดตออเดอร์
+```
+ 
+---
+ 
+## 🗄️ ฐานข้อมูล (Supabase)
+ 
+ตาราง `orders` เก็บออเดอร์ทั้งหมด (เมนูเก็บในไฟล์ `menu.js` เพราะไม่ค่อยเปลี่ยน)
+ 
+| คอลัมน์ | ชนิด | คำอธิบาย |
+|---|---|---|
+| `id` | bigint | รหัสออเดอร์ ใช้ทำเลขคิว (A001, A002, ...) |
+| `created_at` | timestamptz | เวลาที่สั่ง |
+| `items` | jsonb | รายการที่สั่ง (ชื่อ ราคา จำนวน) |
+| `total` | integer | ยอดรวม (บาท) |
+| `status` | text | `pending` / `preparing` / `done` / `cancelled` |
+| `customer_name` | text | ชื่อเล่นลูกค้า |
+ 
+**บัญชีพนักงาน** เก็บในตาราง `auth.users` ที่ Supabase Auth สร้างให้อัตโนมัติ (ล็อกอินด้วย Google หรืออีเมล + รหัสผ่าน) ระบบไม่เก็บรหัสผ่าน Google ส่วนลูกค้าไม่ต้องล็อกอิน จึงไม่มีข้อมูลในตารางนี้
+ 
+**สิทธิ์การเข้าถึง (RLS)**
+ 
+| การกระทำ | ลูกค้า | พนักงาน |
+|---|---|---|
+| สั่งออเดอร์ (insert) | ✅ | ✅ |
+| ดูออเดอร์ (select) | ✅ | ✅ |
+| เปลี่ยนสถานะ (update) | ❌ | ✅ เฉพาะอีเมลพนักงาน |
+ 
+---
+ 
+## 👥 สมาชิก
+ 
+| ชื่อ | รหัสนักศึกษา |
+|---|---|
+| นายวีรวุฒิ นิติทอนกุล | 6804101386 |
+| นายรชต บุญเที่ยง | 6804101373 |
+| นางสาวธนชนก เดชบัณฑิตย์ | 6804101335 |
+| นายสุปรีชา ศรีศุภปรีดา | 6804101392 |
+| นางสาวอนันตญา อุ่นใจ | 6804101396 |
+ 
+---
+ 
+## 📚 แหล่งที่มา
+ 
+- Library: React, React Router, Supabase JS, Swiper (ลิงก์อยู่ในหัวข้อเทคโนโลยีที่ใช้)
+- รูปภาพเมนูและแบนเนอร์: (ใส่แหล่งที่มาของรูป เช่น ถ่ายเอง / Unsplash / Pexels)
+- ใช้ AI ช่วยแนะนำแนวทางและอธิบายโค้ดระหว่างพัฒนา สมาชิกตรวจสอบและทำความเข้าใจโค้ดทุกส่วนก่อนนำมาใช้
