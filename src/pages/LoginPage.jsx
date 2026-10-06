@@ -29,6 +29,10 @@ const LoginPage = () => {
       provider: 'google',
       options: {
         redirectTo: `${window.location.origin}/staff`,
+        // ← เพิ่มใหม่: ให้ Google ขึ้นหน้าเลือกบัญชีทุกครั้ง
+        queryParams: {
+          prompt: 'select_account',
+        },
       },
     })
 
