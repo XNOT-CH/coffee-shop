@@ -28,7 +28,7 @@ const MenuPage = () => {
   // JSX
   return (
     <div>
-      <BannerSlider />
+      <BannerSlider /> {/*  เราดึงมาใช้จากหน้า BannerSlider  */}
       <h2>เมนู</h2>
 
       {/* ช่องค้นหาเมนู กรอง ชื่อ และ คำอธิบาย  */}
