@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom' // ← เพิ่ม
 import supabase from '../supabaseClient'
+import staffEmails from '../data/staff' // ← เพิ่มใหม่: รายชื่ออีเมลพนักงาน
 
 // แปลงสถานะภาษาอังกฤษในฐานข้อมูล เป็นภาษาไทยไว้แสดงผล
 const statusLabel = {
@@ -13,6 +14,7 @@ const statusLabel = {
 const StaffPage = () => {
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
+  const [notStaff, setNotStaff] = useState(false) // ← เพิ่มใหม่: ล็อกอินแล้วแต่ไม่ใช่พนักงาน
   const navigate = useNavigate() // ← เพิ่ม: ตัวพาเปลี่ยนหน้า
 
   // เปิดหน้า → ดึงออเดอร์ทั้งหมด เรียงจากเก่าไปใหม่ (ใครสั่งก่อนอยู่บน)
@@ -22,6 +24,13 @@ const StaffPage = () => {
       const { data: { session } } = await supabase.auth.getSession()
       if (!session) {
         navigate('/login')
+        return
+      }
+
+      // ← เพิ่มใหม่: อีเมลไม่อยู่ในรายชื่อพนักงาน → ไม่ให้ดูออเดอร์
+      if (!staffEmails.includes(session.user.email)) {
+        setNotStaff(true)
+        setLoading(false)
         return
       }
 
@@ -69,6 +78,17 @@ const StaffPage = () => {
 
   if (loading) {
     return <p>กำลังโหลด...</p>
+  }
+
+  // ← เพิ่มใหม่: ล็อกอินแล้ว แต่ไม่ใช่พนักงาน
+  if (notStaff) {
+    return (
+      <div className="no-access">
+        <h2>คุณไม่มีสิทธิ์เข้าถึงหน้าพนักงาน</h2>
+        <p>บัญชีนี้ไม่ได้อยู่ในรายชื่อพนักงาน</p>
+        <button onClick={handleLogout}>ออกจากระบบ</button>
+      </div>
+    )
   }
 
   if (orders.length === 0) {

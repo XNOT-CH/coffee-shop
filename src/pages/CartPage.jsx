@@ -6,7 +6,7 @@ import CartItem from '../components/CartItem'
 import supabase from '../supabaseClient'
 
 const CartPage = () => {
-  const { cart, totalPrice, clearCart } = useCart()   // ← เพิ่ม clearCart
+  const { cart, totalPrice, clearCart, saveLastOrder } = useCart()   // ← เพิ่ม clearCart
   const [customerName, setCustomerName] = useState('')
   const navigate = useNavigate()                      // ← เพิ่มบรรทัดนี้
 
@@ -36,6 +36,7 @@ const CartPage = () => {
     }
 
     // สั่งสำเร็จ → ล้างตะกร้า แล้วพาไปหน้าเลขคิวของออเดอร์นี้
+    saveLastOrder(data.id)
     clearCart()
     navigate(`/queue/${data.id}`)
   }

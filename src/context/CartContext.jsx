@@ -4,6 +4,8 @@ const CartContext = createContext()
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([])
+  // จำเลขออเดอร์ล่าสุด (อ่านจากเบราว์ ถ้าเคยสั่ง)
+  const [lastOrderId, setLastOrderId] = useState(() => localStorage.getItem('lastOrderId'))
 
   // เพิ่มของลงตะกร้า (เจอของซ้ำ → บวกจำนวน, ไม่เจอ → เพิ่มใหม่)
   const addToCart = (item) => {
@@ -46,6 +48,12 @@ export const CartProvider = ({ children }) => {
     setCart([])
   }
 
+  // บันทึกเลขออเดอร์ล่าสุด (เรียกตอนสั่งสำเร็จ)
+  const saveLastOrder = (id) => {
+    setLastOrderId(String(id))
+    localStorage.setItem('lastOrderId' , id)
+  }
+
   // นับจำนวนชิ้น / รวมเงิน
   const totalItems = cart.reduce((sum, c) => sum + c.quantity, 0)
   const totalPrice = cart.reduce((sum, c) => sum + c.price * c.quantity, 0)
@@ -59,8 +67,10 @@ export const CartProvider = ({ children }) => {
         increaseQty,
         decreaseQty,
         clearCart,
+        saveLastOrder,
         totalItems,
         totalPrice,
+        lastOrderId,
       }}
     >
       {children}
