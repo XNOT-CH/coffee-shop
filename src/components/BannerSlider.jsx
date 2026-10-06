@@ -15,7 +15,7 @@ const BannerSlider = () => {
     <Swiper
       className="banner-slider"
       modules={[Autoplay, Pagination]}
-      autoplay={{ delay: 500 }}
+      autoplay={{ delay: 2000 }}
       pagination={{ clickable: true }}
       loop
     >
