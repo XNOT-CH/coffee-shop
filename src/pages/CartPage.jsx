@@ -1,3 +1,4 @@
+// เชื่อมต่อกับ Supabase 
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
@@ -21,7 +22,7 @@ const CartPage = () => {
     const { data, error } = await supabase
       .from('orders')
       .insert({
-        items,
+        items, // items: items,
         total: totalPrice,
         customer_name: customerName,
       })
