@@ -5,10 +5,10 @@ const Navbar = () => {
   return (
     <header className="navbar">
       <Link to="/" className="brand">
-        <img src="/src/assets/หมีชิบิหมวกคาเฟ่รีสอร์ต.png" alt="logo" className="logo" />
+        <img src="/images/หมีชิบิหมวกคาเฟ่รีสอร์ต.png" alt="logo" className="logo" />
         <div>
-          <h1 className="shop-name">ร้าน</h1>
-          <p className="shop-tagline">คำอธิบายร้าน</p>
+          <h1 className="shop-name">Gachi Café</h1>
+          <p className="shop-tagline">กาแฟที่อร่อยต้องที่นี่</p>
         </div>
       </Link>
 
