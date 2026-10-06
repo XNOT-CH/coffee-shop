@@ -1,33 +1,47 @@
-import { useState } from 'react'
-import menu from '../data/menu'
-import MenuCard from '../components/MenuCard'
-import BannerSlider from '../components/BannerSlider'
-const categories = ['ทั้งหมด', 'กาแฟ', 'ชาและนม', 'ขนม']
+import { useState } from "react";
+import menu from "../data/menu";
+import MenuCard from "../components/MenuCard";
+import BannerSlider from "../components/BannerSlider";
+const categories = ["ทั้งหมด", "กาแฟ", "ชาและนม", "ขนม"];
 
 // ค่า เริ่มต้น ของปุ่ม
 const MenuPage = () => {
   // JS
 
   // ให้เว็บจำว่ากดปุ่มไหน
-  const [selectedCategory, setSelectedCategory] = useState('ทั้งหมด')
-
-
+  const [selectedCategory, setSelectedCategory] = useState("ทั้งหมด");
+  // เก็บ ข้อมูลค้นหา
+  const [searchTerm, setSearchTerm] = useState("");
 
   const filteredMenu =
-    selectedCategory === 'ทั้งหมด'
+    selectedCategory === "ทั้งหมด"
       ? menu
-      : menu.filter((item) => item.category === selectedCategory)
+      : menu.filter((item) => item.category === selectedCategory);
 
+  // ค้นหาได้ด้วย อะไรบ้าง มี ชื่อ คำอธิบาย
+  const filteredMenuWithSearch = menu.filter((item) => {
+    return (
+      item.name.includes(searchTerm) || item.description.includes(searchTerm)
+    );
+  });
 
   // JSX
   return (
     <div>
+      <BannerSlider /> {/*  เราดึงมาใช้จากหน้า BannerSlider  */}
       <h2>เมนู</h2>
-      {/* <BannerSlider /> */}
 
+      {/* ช่องค้นหาเมนู กรอง ชื่อ และ คำอธิบาย  */}
+      <div className="menu-search">
+        <input
+          type="text"
+          placeholder="ค้นหาเมนู"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
 
-      <div className='category'>
-
+      <div className="category">
         {/* วนลูปรายชื่อหมวด ['ทั้งหมด', 'กาแฟ', 'ชาและนม', 'ขนม'] ทีละตัว รอบไหนเจอชื่อไหน ชื่อนั้นจะอยู่ในตัวแปร category */}
         {categories.map((category) => (
           // แต่ละรอบสร้างปุ่ม 1 ปุ่ม รวม 4 รอบได้ 4 ปุ่ม
@@ -36,12 +50,13 @@ const MenuPage = () => {
             // ป้ายชื่อประจำปุ่ม ให้ React แยกออกว่าปุ่มไหนเป็นปุ่มไหน (ผู้ใช้มองไม่เห็น)
             // ใช่ → ได้ class category-btn active (จะถูกแต่งให้เด่น)
             // ไม่ใช่ → ได้แค่ category-btn
-            className={selectedCategory === category ? 'category-btn active' : 'category-btn'}
-
-
+            className={
+              selectedCategory === category
+                ? "category-btn active"
+                : "category-btn"
+            }
             onClick={() => setSelectedCategory(category)}
           >
-
             {/* category มีค่า	ปุ่มขึ้นคำว่า
       1	'ทั้งหมด'	ทั้งหมด
       2	'กาแฟ'	กาแฟ
@@ -52,16 +67,14 @@ const MenuPage = () => {
         ))}
       </div>
 
-
       {/* เมนูสินค้า  */}
       <div className="menu-list">
-        {filteredMenu.map((item) => (
+        {filteredMenuWithSearch.map((item) => (
           <MenuCard key={item.id} item={item} />
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-
-export default MenuPage
+export default MenuPage;

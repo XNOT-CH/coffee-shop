@@ -1,34 +1,42 @@
-import { useState } from 'react'
+// เราใช้ Swiper สำหรับทำสไลเดอร์ มันเป็น library ที่ทำให้เราสามารถสร้างสไลเดอร์ได้ง่าย ๆ
 
-const banners = [
-    '/banners/Gemini_Generated_Image_y91scuy91scuy91s.jpg',
-    '/banners/Gemini_Generated_Image_m7zwjgm7zwjgm7zw.jpg',
+import { Swiper, SwiperSlide} from 'swiper/react';
+import { Autoplay, Pagination } from 'swiper/modules'
+import 'swiper/css';
+import 'swiper/css/pagination'
+
+// ทำสไลเดอร์สำหรับแบนเนอร์
+// ส่วนที่ เรา เพิ่ม รูปภาพแบนเนอร์ จากลิ้งรูป อย่างในตัวอย่างมี 3 รูป 
+const banners  = [
+    '/images/banner-1.jpg',
+    '/images/banner-2.jpg',
+    '/images/banner-3.jpg',
 ]
 
+
+// สร้าง component BannerSlider
+// Swiper เป็น component ที่เราจะใช้สร้างสไลเดอร์
 const BannerSlider = () => {
-    const [current, setCurrent] = useState(0)
-
-    return (
-        <div className="banner-slider">
-            <div
-                className="banner-track"
-                onScroll={(e) => setCurrent(Math.round(e.target.scrollLeft / e.target.clientWidth))}
-            >
-                {banners.map((banner, index) => (
-                    <img key={banner} src={banner} alt={`โปรโมชัน ${index + 1}`} />
-                ))}
-            </div>
-
-            <div className="banner-dots">
-                {banners.map((banner, index) => (
-                    <span
-                        key={banner}
-                        className={current === index ? 'dot active' : 'dot'}
-                    ></span>
-                ))}
-            </div>
-        </div>
-    )
+  
+  // return คือที่ เราจะ ให้ มันออกไป แสดงผลหน้าเว็บ 
+  return (
+    <Swiper
+      className="banner-slider"
+      modules={[Autoplay, Pagination]}
+      autoplay={{ delay: 2000 }}
+      pagination={{ clickable: true }}
+      loop
+    >
+      {/* // วนรูปที่ อยู่ใน array banners แล้วสร้าง SwiperSlide สำหรับแต่ละรูป
+      // แล้วเอาไป <BannerSlider /> ใน Menupage.jsx */}
+      {banners.map((src) => (
+        <SwiperSlide key={src}>
+          <img src={src} alt="โปรโมชันของร้าน" />
+        </SwiperSlide>
+      ))}
+    </Swiper>
+  )
 }
 
-export default BannerSlider
+// ถ้าเราอยากใช้ ภาพ สไล ก็ พิม < BannerSlider /> ได้เลย  ตอนนี้เราใช้ ที่ี MenuPage.jsx 
+export default BannerSlider   
