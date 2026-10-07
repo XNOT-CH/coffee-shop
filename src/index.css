@@ -868,7 +868,7 @@ main > div:not([class]) > h2 + p + button:active {
   transform: scale(0.96);
 }
 
-/* Signed in but not on the staff list — centred card with a sad cat */
+/* Signed in but not on the staff list — centred card */
 .no-access {
   display: flex;
   flex-direction: column;
@@ -881,14 +881,6 @@ main > div:not([class]) > h2 + p + button:active {
   box-shadow: var(--shadow-md);
   text-align: center;
   animation: fade-up 0.45s var(--ease-out) backwards;
-}
-
-.no-access::before {
-  content: '😿' / '';
-  margin-bottom: 10px;
-  font-size: 48px;
-  line-height: 1;
-  animation: pop 0.5s var(--ease-spring) 0.15s backwards;
 }
 
 main > .no-access > h2 {
